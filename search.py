@@ -1,24 +1,17 @@
-# search.py
-
-import asyncio
 from dotenv import load_dotenv
 import os
 from exa_py import Exa
 from typing import List, Tuple
 from langchain_core.documents import Document
-
-# NEW imports for local scraping
 import requests
 from bs4 import BeautifulSoup
 
-# Load .env variables
 load_dotenv(override=True)
 
-# Initialize the Exa client
 exa_api_key = os.getenv("EXA_API_KEY", "")
 exa = Exa(api_key=exa_api_key)
 
-# Default search config
+#config for web search
 websearch_config = {
     "parameters": {
         "default_num_results": 5,
@@ -26,6 +19,7 @@ websearch_config = {
     }
 }
 
+#search web
 async def search_web(query: str, num_results: int = None) -> Tuple[str, list]:
     """Search the web using Exa API and return formatted and raw results."""
     try:
@@ -44,6 +38,7 @@ async def search_web(query: str, num_results: int = None) -> Tuple[str, list]:
     except Exception as e:
         return f"An error occurred while searching with Exa: {e}", []
 
+#format search result
 def format_search_results(search_results):
     if not search_results.results:
         return "No results found."
@@ -60,6 +55,7 @@ def format_search_results(search_results):
             markdown_results += "\n"
     return markdown_results
 
+#fetch web content
 async def get_web_content(url: str) -> List[Document]:
     """
     Fetch the page HTML with requests, parse with BeautifulSoup,
