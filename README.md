@@ -1,6 +1,10 @@
 # 🧠 Knowbl – Web + Document RAG Assistant
 
-[![Watch the video]("image/knowbl.jpg")](https://www.youtube.com/watch?v=8OYBkonOg48)
+📽️ **Click the image below to watch the project demo:**
+
+<a href="https://www.youtube.com/watch?v=8OYBkonOg48">
+  <img src="image/knowbl.jpg" width="600" alt="Watch the video">
+</a>
 
 Knowbl is an intelligent assistant that combines **real-time web search** with **RAG (Retrieval-Augmented Generation)**. It supports both live internet queries and document-based Q&A using LangChain, FAISS, and OpenAI (or local) embeddings, orchestrated via the **Model Context Protocol (MCP)** for modular agent interactions in a  Streamlit UI.
 
