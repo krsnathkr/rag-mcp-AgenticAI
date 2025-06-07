@@ -1,16 +1,15 @@
 import os
-import streamlit as st
-import asyncio
-from dotenv import load_dotenv
-load_dotenv(override=True)
-from langchain_core.documents import Document
-from PyPDF2 import PdfReader
-
-import search
 import rag
-
-from langchain.chat_models import ChatOpenAI
+import asyncio
+import search
+import streamlit as st
+from dotenv import load_dotenv
+from PyPDF2 import PdfReader
+from langchain_core.documents import Document
 from langchain.chains import RetrievalQA
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.chat_models import ChatOpenAI
+
 
 st.set_page_config(
     page_title="Knowbl",
@@ -108,14 +107,15 @@ with tab_chat:
 
             #results
             cols = ac.columns([3, 1])
-            with cols[1]:
-                with st.expander("🔗 Sources", expanded=False):
-                    for url, snippet in data['search_results']:
-                        st.markdown(f"- [{url}]({url})")
-                with st.expander("📦 RAG Chunks", expanded=False):
-                    for i, d in enumerate(data['rag_docs'], 1):
-                        snippet = d.page_content.strip().replace("\n", " ")
-                        st.markdown(f"{i}. {snippet[:200]}…")
+            with st.expander("🔗 Sources", expanded=False):
+                for url, snippet in data['search_results']:
+                    st.markdown(f"- [{url}]({url})")
+
+            with st.expander("📦 RAG Chunks", expanded=False):
+                for i, d in enumerate(data['rag_docs'], 1):
+                    snippet = d.page_content.strip().replace("\n", " ")
+                    st.markdown(f"{i}. {snippet[:200]}…")
+
 
 #document Q&A with summarization + sources
 with tab_doc:
