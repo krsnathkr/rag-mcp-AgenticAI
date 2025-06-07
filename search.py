@@ -1,19 +1,24 @@
+# search.py
+
 import asyncio
-import os
 from dotenv import load_dotenv
-from typing import List, Tuple
+import os
 from exa_py import Exa
+from typing import List, Tuple
 from langchain_core.documents import Document
+
+# NEW imports for local scraping
 import requests
 from bs4 import BeautifulSoup
 
+# Load .env variables
 load_dotenv(override=True)
 
-#exa api setup
+# Initialize the Exa client
 exa_api_key = os.getenv("EXA_API_KEY", "")
 exa = Exa(api_key=exa_api_key)
 
-#configuration
+# Default search config
 websearch_config = {
     "parameters": {
         "default_num_results": 5,
@@ -56,7 +61,10 @@ def format_search_results(search_results):
     return markdown_results
 
 async def get_web_content(url: str) -> List[Document]:
-    """Scrape a URL using requests and BeautifulSoup and return Document."""
+    """
+    Fetch the page HTML with requests, parse with BeautifulSoup,
+    and return as a single Document.
+    """
     try:
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()

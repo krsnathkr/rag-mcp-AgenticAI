@@ -1,5 +1,3 @@
-# mcp_server.py
-
 import asyncio
 from mcp.server.fastmcp import FastMCP
 import rag
@@ -13,11 +11,10 @@ load_dotenv(override=True)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Define the MCP agent
 mcp = FastMCP(
     name="web_search", 
     version="1.0.0",
-    description="Web search capability using Exa API and RAG to find relevant information from the internet in real-time."
+    description="Web search capability using Exa API , Firecrawl API  that provides real-time internet search results and use RAG to search for relevant data. Supports both basic and advanced search with filtering options including domain restrictions, text inclusion requirements, and date filtering. Returns formatted results with titles, URLs, publication dates, and content summaries."
 )
 
 @mcp.tool()
@@ -35,6 +32,7 @@ async def search_web_tool(query: str) -> str:
     vectorstore = await rag.create_rag(urls)
     rag_results = await rag.search_rag(query, vectorstore)
     
+    # You can optionally include the formatted search results in the output
     full_results = f"{formatted_results}\n\n### RAG Results:\n\n"
     full_results += '\n---\n'.join(doc.page_content for doc in rag_results)
     
@@ -51,6 +49,8 @@ async def get_web_content_tool(url: str) -> str:
         return "Timeout occurred while fetching web content. Please try again later."
     except Exception as e:
         return f"An error occurred while fetching web content: {str(e)}"
+    
 
 if __name__ == "__main__":
     mcp.run(transport="sse")
+
